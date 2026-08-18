@@ -67,7 +67,8 @@ export const createFictionalOrder = (
   const lines = buildCartLines(cart);
   const subtotal = lines.reduce((sum, line) => sum + line.lineTotal, 0);
   const total = subtotal + FICTIONAL_SHIPPING;
-  const courier = COURIERS[Math.floor(Math.random() * COURIERS.length)];
+  const courier =
+    COURIERS[Math.floor(Math.random() * COURIERS.length)] ?? COURIERS[0]!;
 
   return {
     id: `FIC-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
