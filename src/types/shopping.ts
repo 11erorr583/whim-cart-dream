@@ -100,5 +100,6 @@ export interface SessionState {
   personalityId: PersonalityId | null;
   cart: CartItem[];
   order: FictionalOrder | null;
+  callCompleted: boolean;
   result: FinalResult | null;
 }
