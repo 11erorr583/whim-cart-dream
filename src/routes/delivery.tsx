@@ -129,20 +129,27 @@ function DeliveryPage() {
         </ol>
 
         <div className="mt-7 flex flex-wrap gap-3">
-          <PopLink to="/call" size="lg" variant="accent" disabled={!delivered}>
-            Answer the courier call 📞
-          </PopLink>
-          {!delivered ? (
-            <PopButton
-              size="lg"
-              variant="ghost"
-              onClick={() => setSkipped(true)}
-              aria-label="Skip the imaginary delivery countdown"
-            >
-              Skip the wait
-            </PopButton>
-          ) : null}
+          {delivered ? (
+            <PopLink to="/call" size="lg" variant="accent">
+              Answer the courier call 📞
+            </PopLink>
+          ) : (
+            <>
+              <PopButton size="lg" variant="accent" disabled>
+                Waiting for the courier…
+              </PopButton>
+              <PopButton
+                size="lg"
+                variant="ghost"
+                onClick={() => setSkipped(true)}
+                aria-label="Skip the imaginary delivery countdown"
+              >
+                Skip the wait
+              </PopButton>
+            </>
+          )}
         </div>
+
       </div>
     </PageShell>
   );
