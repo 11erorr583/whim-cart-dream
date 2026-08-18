@@ -36,6 +36,7 @@ function DeliveryPage() {
   const { session, markDelivered } = useSession();
   const order = session.order;
   const [remaining, setRemaining] = useState(DELIVERY_SECONDS);
+  const [skipped, setSkipped] = useState(false);
 
   useEffect(() => {
     if (!order) return;
@@ -46,7 +47,7 @@ function DeliveryPage() {
     return () => window.clearInterval(id);
   }, [order]);
 
-  const delivered = remaining <= 0;
+  const delivered = skipped || remaining <= 0;
 
   useEffect(() => {
     if (delivered && order && order.status !== "delivered") markDelivered();
@@ -64,7 +65,9 @@ function DeliveryPage() {
     );
   }
 
-  const progress = Math.min(100, Math.round(((DELIVERY_SECONDS - remaining) / DELIVERY_SECONDS) * 100));
+  const progress = delivered
+    ? 100
+    : Math.min(100, Math.round(((DELIVERY_SECONDS - remaining) / DELIVERY_SECONDS) * 100));
   const stageIndex = Math.min(STAGES.length - 1, Math.floor((progress / 100) * STAGES.length));
 
   return (
@@ -133,7 +136,7 @@ function DeliveryPage() {
             <PopButton
               size="lg"
               variant="ghost"
-              onClick={() => setRemaining(0)}
+              onClick={() => setSkipped(true)}
               aria-label="Skip the imaginary delivery countdown"
             >
               Skip the wait
