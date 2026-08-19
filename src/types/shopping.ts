@@ -47,6 +47,21 @@ export interface Product {
   reviews: ProductReview[];
 }
 
+/** A fictional product uploaded by a player acting as a seller. */
+export interface SellerProduct extends Product {
+  submittedBySeller: true;
+  sellerTagline: string;
+  sellerAvatar: string;
+  createdAt: string;
+}
+
+/** Public, non-sensitive seller identity. No real personal data is collected. */
+export interface SellerProfile {
+  displayName: string;
+  tagline: string;
+  avatar: string;
+}
+
 export interface ProductReview {
   id: string;
   author: string;

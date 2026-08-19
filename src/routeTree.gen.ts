@@ -15,10 +15,13 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as DeliveryRouteImport } from './routes/delivery'
+import { Route as ManageSellerRouteImport } from './routes/manage-seller'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as PersonalityRouteImport } from './routes/personality'
 import { Route as ReplayRouteImport } from './routes/replay'
 import { Route as ResultRouteImport } from './routes/result'
+import { Route as SellRouteImport } from './routes/sell'
+import { Route as SellerProfileRouteImport } from './routes/seller-profile'
 import { Route as ProductProductIdRouteImport } from './routes/product.$productId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -51,6 +54,11 @@ const DeliveryRoute = DeliveryRouteImport.update({
   path: '/delivery',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManageSellerRoute = ManageSellerRouteImport.update({
+  id: '/manage-seller',
+  path: '/manage-seller',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrderRoute = OrderRouteImport.update({
   id: '/order',
   path: '/order',
@@ -71,6 +79,16 @@ const ResultRoute = ResultRouteImport.update({
   path: '/result',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SellRoute = SellRouteImport.update({
+  id: '/sell',
+  path: '/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SellerProfileRoute = SellerProfileRouteImport.update({
+  id: '/seller-profile',
+  path: '/seller-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductProductIdRoute = ProductProductIdRouteImport.update({
   id: '/product/$productId',
   path: '/product/$productId',
@@ -84,10 +102,13 @@ export interface FileRoutesByFullPath {
   '/catalog': typeof CatalogRoute
   '/checkout': typeof CheckoutRoute
   '/delivery': typeof DeliveryRoute
+  '/manage-seller': typeof ManageSellerRoute
   '/order': typeof OrderRoute
   '/personality': typeof PersonalityRoute
   '/replay': typeof ReplayRoute
   '/result': typeof ResultRoute
+  '/sell': typeof SellRoute
+  '/seller-profile': typeof SellerProfileRoute
   '/product/$productId': typeof ProductProductIdRoute
 }
 export interface FileRoutesByTo {
@@ -97,10 +118,13 @@ export interface FileRoutesByTo {
   '/catalog': typeof CatalogRoute
   '/checkout': typeof CheckoutRoute
   '/delivery': typeof DeliveryRoute
+  '/manage-seller': typeof ManageSellerRoute
   '/order': typeof OrderRoute
   '/personality': typeof PersonalityRoute
   '/replay': typeof ReplayRoute
   '/result': typeof ResultRoute
+  '/sell': typeof SellRoute
+  '/seller-profile': typeof SellerProfileRoute
   '/product/$productId': typeof ProductProductIdRoute
 }
 export interface FileRoutesById {
@@ -111,10 +135,13 @@ export interface FileRoutesById {
   '/catalog': typeof CatalogRoute
   '/checkout': typeof CheckoutRoute
   '/delivery': typeof DeliveryRoute
+  '/manage-seller': typeof ManageSellerRoute
   '/order': typeof OrderRoute
   '/personality': typeof PersonalityRoute
   '/replay': typeof ReplayRoute
   '/result': typeof ResultRoute
+  '/sell': typeof SellRoute
+  '/seller-profile': typeof SellerProfileRoute
   '/product/$productId': typeof ProductProductIdRoute
 }
 export interface FileRouteTypes {
@@ -126,10 +153,13 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/checkout'
     | '/delivery'
+    | '/manage-seller'
     | '/order'
     | '/personality'
     | '/replay'
     | '/result'
+    | '/sell'
+    | '/seller-profile'
     | '/product/$productId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -139,10 +169,13 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/checkout'
     | '/delivery'
+    | '/manage-seller'
     | '/order'
     | '/personality'
     | '/replay'
     | '/result'
+    | '/sell'
+    | '/seller-profile'
     | '/product/$productId'
   id:
     | '__root__'
@@ -152,10 +185,13 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/checkout'
     | '/delivery'
+    | '/manage-seller'
     | '/order'
     | '/personality'
     | '/replay'
     | '/result'
+    | '/sell'
+    | '/seller-profile'
     | '/product/$productId'
   fileRoutesById: FileRoutesById
 }
@@ -166,10 +202,13 @@ export interface RootRouteChildren {
   CatalogRoute: typeof CatalogRoute
   CheckoutRoute: typeof CheckoutRoute
   DeliveryRoute: typeof DeliveryRoute
+  ManageSellerRoute: typeof ManageSellerRoute
   OrderRoute: typeof OrderRoute
   PersonalityRoute: typeof PersonalityRoute
   ReplayRoute: typeof ReplayRoute
   ResultRoute: typeof ResultRoute
+  SellRoute: typeof SellRoute
+  SellerProfileRoute: typeof SellerProfileRoute
   ProductProductIdRoute: typeof ProductProductIdRoute
 }
 
@@ -217,6 +256,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeliveryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manage-seller': {
+      id: '/manage-seller'
+      path: '/manage-seller'
+      fullPath: '/manage-seller'
+      preLoaderRoute: typeof ManageSellerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/order': {
       id: '/order'
       path: '/order'
@@ -245,6 +291,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sell': {
+      id: '/sell'
+      path: '/sell'
+      fullPath: '/sell'
+      preLoaderRoute: typeof SellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seller-profile': {
+      id: '/seller-profile'
+      path: '/seller-profile'
+      fullPath: '/seller-profile'
+      preLoaderRoute: typeof SellerProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/product/$productId': {
       id: '/product/$productId'
       path: '/product/$productId'
@@ -262,10 +322,13 @@ const rootRouteChildren: RootRouteChildren = {
   CatalogRoute: CatalogRoute,
   CheckoutRoute: CheckoutRoute,
   DeliveryRoute: DeliveryRoute,
+  ManageSellerRoute: ManageSellerRoute,
   OrderRoute: OrderRoute,
   PersonalityRoute: PersonalityRoute,
   ReplayRoute: ReplayRoute,
   ResultRoute: ResultRoute,
+  SellRoute: SellRoute,
+  SellerProfileRoute: SellerProfileRoute,
   ProductProductIdRoute: ProductProductIdRoute,
 }
 export const routeTree = rootRouteImport

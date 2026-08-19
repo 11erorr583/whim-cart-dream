@@ -8,6 +8,7 @@ import { ProductCard } from "@/components/fictional/ProductCard";
 import { StepBadge } from "@/components/fictional/StepBadge";
 import { getPersonality } from "@/data/personalities";
 import { CATEGORIES, PRODUCTS } from "@/data/products";
+import { useSeller } from "@/state/seller";
 import { cartCount } from "@/lib/shopping-logic";
 import { useSession } from "@/state/session";
 import type { ProductCategory } from "@/types/shopping";
@@ -35,6 +36,7 @@ type SortKey = "featured" | "price-asc" | "price-desc" | "rating";
 
 function CatalogPage() {
   const { session, addToCart } = useSession();
+  const { products: sellerProducts } = useSeller();
   const personality = getPersonality(session.personalityId);
   const [category, setCategory] = useState<ProductCategory | "all">("all");
   const [query, setQuery] = useState("");
@@ -42,7 +44,8 @@ function CatalogPage() {
   const [lastAdded, setLastAdded] = useState<string | null>(null);
 
   const products = useMemo(() => {
-    const filtered = PRODUCTS.filter(
+    const catalog = [...sellerProducts, ...PRODUCTS];
+    const filtered = catalog.filter(
       (p) =>
         (category === "all" || p.category === category) &&
         (query.trim() === "" ||
@@ -53,7 +56,7 @@ function CatalogPage() {
     if (sort === "price-desc") sorted.sort((a, b) => b.price - a.price);
     if (sort === "rating") sorted.sort((a, b) => b.rating - a.rating);
     return sorted;
-  }, [category, query, sort]);
+  }, [category, query, sort, sellerProducts]);
 
   const handleAdd = (productId: string) => {
     addToCart(productId);
