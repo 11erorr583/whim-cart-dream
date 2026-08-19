@@ -1,12 +1,13 @@
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { FictionalNotice } from "@/components/fictional/FictionalNotice";
 import { PageShell } from "@/components/fictional/PageShell";
 import { PopButton, PopLink } from "@/components/fictional/PopButton";
-import { getProduct } from "@/data/products";
+import { resolveProduct } from "@/data/product-registry";
 import { formatCoins } from "@/lib/fictional-config";
 import { useSession } from "@/state/session";
+import { useSeller } from "@/state/seller";
 
 export const Route = createFileRoute("/product/$productId")({
   head: () => ({
@@ -28,7 +29,8 @@ export const Route = createFileRoute("/product/$productId")({
 
 function ProductDetail() {
   const { productId } = Route.useParams();
-  const product = getProduct(productId);
+  const { products: sellerProducts } = useSeller();
+  const product = useMemo(() => resolveProduct(productId), [productId, sellerProducts]);
   const { addToCart } = useSession();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);

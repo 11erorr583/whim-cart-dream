@@ -40,6 +40,8 @@ export function PageShell({
               { to: "/personality", label: "Personality" },
               { to: "/catalog", label: "Catalog" },
               { to: "/cart", label: "Cart" },
+              { to: "/sell", label: "Sell" },
+              { to: "/manage-seller", label: "My listings" },
             ].map((item) => (
               <Link
                 key={item.to}

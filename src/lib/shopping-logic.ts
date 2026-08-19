@@ -1,4 +1,4 @@
-import { PRODUCTS, getProduct } from "@/data/products";
+import { allProducts, resolveProduct } from "@/data/product-registry";
 import { getPersonality } from "@/data/personalities";
 import {
   COURIERS,
@@ -25,7 +25,7 @@ export interface DetailedCartLine {
 export const buildCartLines = (cart: CartItem[]): DetailedCartLine[] =>
   cart
     .map((item) => {
-      const product = getProduct(item.productId);
+      const product = resolveProduct(item.productId);
       if (!product) return null;
       return { product, quantity: item.quantity, lineTotal: product.price * item.quantity };
     })
@@ -126,13 +126,13 @@ export const buildFinalResult = (
 
 export const recommendFor = (personalityId: PersonalityId | null): Product[] => {
   if (personalityId === "delusional-millionaire") {
-    return [...PRODUCTS].sort((a, b) => b.price - a.price).slice(0, 3);
+    return [...allProducts()].sort((a, b) => b.price - a.price).slice(0, 3);
   }
   if (personalityId === "responsible-adult") {
-    return [...PRODUCTS].sort((a, b) => b.rating - a.rating).slice(0, 3);
+    return [...allProducts()].sort((a, b) => b.rating - a.rating).slice(0, 3);
   }
   if (personalityId === "window-shopper") {
-    return [...PRODUCTS].sort((a, b) => a.price - b.price).slice(0, 3);
+    return [...allProducts()].sort((a, b) => a.price - b.price).slice(0, 3);
   }
-  return [...PRODUCTS].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 3);
+  return [...allProducts()].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 3);
 };
