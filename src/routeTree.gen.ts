@@ -19,6 +19,7 @@ import { Route as OrderRouteImport } from './routes/order'
 import { Route as PersonalityRouteImport } from './routes/personality'
 import { Route as ReplayRouteImport } from './routes/replay'
 import { Route as ResultRouteImport } from './routes/result'
+import { Route as SellRouteImport } from './routes/sell'
 import { Route as ProductProductIdRouteImport } from './routes/product.$productId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -71,6 +72,11 @@ const ResultRoute = ResultRouteImport.update({
   path: '/result',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SellRoute = SellRouteImport.update({
+  id: '/sell',
+  path: '/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductProductIdRoute = ProductProductIdRouteImport.update({
   id: '/product/$productId',
   path: '/product/$productId',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/personality': typeof PersonalityRoute
   '/replay': typeof ReplayRoute
   '/result': typeof ResultRoute
+  '/sell': typeof SellRoute
   '/product/$productId': typeof ProductProductIdRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/personality': typeof PersonalityRoute
   '/replay': typeof ReplayRoute
   '/result': typeof ResultRoute
+  '/sell': typeof SellRoute
   '/product/$productId': typeof ProductProductIdRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/personality': typeof PersonalityRoute
   '/replay': typeof ReplayRoute
   '/result': typeof ResultRoute
+  '/sell': typeof SellRoute
   '/product/$productId': typeof ProductProductIdRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/personality'
     | '/replay'
     | '/result'
+    | '/sell'
     | '/product/$productId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/personality'
     | '/replay'
     | '/result'
+    | '/sell'
     | '/product/$productId'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/personality'
     | '/replay'
     | '/result'
+    | '/sell'
     | '/product/$productId'
   fileRoutesById: FileRoutesById
 }
@@ -170,6 +182,7 @@ export interface RootRouteChildren {
   PersonalityRoute: typeof PersonalityRoute
   ReplayRoute: typeof ReplayRoute
   ResultRoute: typeof ResultRoute
+  SellRoute: typeof SellRoute
   ProductProductIdRoute: typeof ProductProductIdRoute
 }
 
@@ -245,6 +258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sell': {
+      id: '/sell'
+      path: '/sell'
+      fullPath: '/sell'
+      preLoaderRoute: typeof SellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/product/$productId': {
       id: '/product/$productId'
       path: '/product/$productId'
@@ -266,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   PersonalityRoute: PersonalityRoute,
   ReplayRoute: ReplayRoute,
   ResultRoute: ResultRoute,
+  SellRoute: SellRoute,
   ProductProductIdRoute: ProductProductIdRoute,
 }
 export const routeTree = rootRouteImport
