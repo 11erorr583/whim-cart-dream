@@ -7,6 +7,14 @@ export const CURRENCY_LABEL = "fictional coins";
 
 export const STORAGE_KEY = "fsep.session.v1";
 
+/** Seller profile + uploaded fictional products (gameplay state only). */
+export const SELLER_STORAGE_KEY = "fsep.seller.v1";
+
+export const SELLER_DISCLAIMER =
+  "Uploads are part of a fictional game. Nothing is sold, shipped, or charged — please only submit made-up products.";
+
+export const AVATAR_CHOICES = ["🧑‍🚀", "🦄", "🐙", "🤖", "🧙", "🐸", "👽", "🦩"];
+
 /** Imaginary delivery duration in seconds. */
 export const DELIVERY_SECONDS = 45;
 
