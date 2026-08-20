@@ -21,15 +21,13 @@ import type { FictionalOrder, PersonalityId, SessionState } from "@/types/shoppi
 const EMPTY_SESSION: SessionState = {
   personalityId: null,
   cart: [],
+  wishlist: [],
   order: null,
   callCompleted: false,
   result: null,
+  walletBalance: 2500,
 };
 
-/**
- * Gameplay state only. Nothing personal or sensitive is ever persisted.
- * Swap the localStorage read/write for REST calls when a backend exists.
- */
 function readSession(): SessionState {
   if (typeof window === "undefined") return EMPTY_SESSION;
   try {
@@ -49,7 +47,11 @@ interface SessionContextValue {
   setQuantity: (productId: string, quantity: number) => void;
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
-  placeOrder: () => FictionalOrder | null;
+  toggleWishlist: (productId: string) => void;
+  placeOrder: (
+    shippingSpeed?: "Standard (Free)" | "Express (2-Day)" | "Same-Day Priority",
+    customAddress?: Partial<FictionalOrder["shippingAddress"]>,
+  ) => FictionalOrder | null;
   markDelivered: () => void;
   completeCall: () => void;
   finishExperience: () => void;
@@ -72,7 +74,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
     } catch {
-      /* storage unavailable — gameplay continues in memory */
+      /* fallback */
     }
   }, [session, hydrated]);
 
@@ -94,15 +96,42 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => setSession((prev) => ({ ...prev, cart: [] })), []);
 
-  const placeOrder = useCallback(() => {
-    let created: FictionalOrder | null = null;
+  const toggleWishlist = useCallback((productId: string) => {
     setSession((prev) => {
-      if (prev.cart.length === 0) return prev;
-      created = createFictionalOrder(prev.cart, prev.personalityId);
-      return { ...prev, order: created, cart: [], callCompleted: false, result: null };
+      const exists = prev.wishlist.includes(productId);
+      return {
+        ...prev,
+        wishlist: exists
+          ? prev.wishlist.filter((id) => id !== productId)
+          : [...prev.wishlist, productId],
+      };
     });
-    return created;
   }, []);
+
+  const placeOrder = useCallback(
+    (
+      shippingSpeed:
+        "Standard (Free)" | "Express (2-Day)" | "Same-Day Priority" = "Standard (Free)",
+      customAddress?: Partial<FictionalOrder["shippingAddress"]>,
+    ) => {
+      let created: FictionalOrder | null = null;
+      setSession((prev) => {
+        if (prev.cart.length === 0) return prev;
+        created = createFictionalOrder(prev.cart, prev.personalityId, shippingSpeed, customAddress);
+        const nextWallet = Math.max(0, prev.walletBalance - (created?.total ?? 0));
+        return {
+          ...prev,
+          order: created,
+          cart: [],
+          callCompleted: false,
+          result: null,
+          walletBalance: nextWallet,
+        };
+      });
+      return created;
+    },
+    [],
+  );
 
   const markDelivered = useCallback(() => {
     setSession((prev) =>
@@ -116,9 +145,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const finishExperience = useCallback(() => {
     setSession((prev) =>
-      prev.order
-        ? { ...prev, result: buildFinalResult(prev.order, prev.callCompleted) }
-        : prev,
+      prev.order ? { ...prev, result: buildFinalResult(prev.order, prev.callCompleted) } : prev,
     );
   }, []);
 
@@ -140,6 +167,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setQuantity,
       removeFromCart,
       clearCart,
+      toggleWishlist,
       placeOrder,
       markDelivered,
       completeCall,
@@ -154,6 +182,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setQuantity,
       removeFromCart,
       clearCart,
+      toggleWishlist,
       placeOrder,
       markDelivered,
       completeCall,

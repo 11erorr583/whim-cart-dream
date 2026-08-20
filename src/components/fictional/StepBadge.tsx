@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 export function StepBadge({
   step,
-  total = 11,
+  total = 5,
   label,
   className,
 }: {
@@ -12,17 +12,17 @@ export function StepBadge({
   className?: string;
 }) {
   return (
-    <p
+    <div
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border-2 border-ink bg-mint px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest text-mint-foreground",
+        "inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100/80 px-3 py-1 text-xs font-semibold text-slate-800",
         className,
       )}
     >
-      <span>
-        Step {step}/{total}
+      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+      <span className="text-slate-500 font-medium">
+        Stage {step} of {total}:
       </span>
-      <span aria-hidden="true">•</span>
-      <span>{label}</span>
-    </p>
+      <span className="text-slate-900 font-semibold">{label}</span>
+    </div>
   );
 }

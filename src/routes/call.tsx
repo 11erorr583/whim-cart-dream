@@ -1,23 +1,25 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { Phone, PhoneOff, Mic, User, ShieldCheck, CheckCircle2, ArrowRight } from "lucide-react";
 
 import { FictionalNotice } from "@/components/fictional/FictionalNotice";
 import { PageShell } from "@/components/fictional/PageShell";
-import { PopButton, PopLink } from "@/components/fictional/PopButton";
 import { StepBadge } from "@/components/fictional/StepBadge";
 import { useSession } from "@/state/session";
 
 export const Route = createFileRoute("/call")({
   head: () => ({
     meta: [
-      { title: "Simulated Delivery Call — Pretendly" },
+      { title: "Courier Delivery Call — Whim Cart Marketplace" },
       {
         name: "description",
-        content:
-          "A pretend in-browser call from your imaginary courier. No phone numbers, no real calls.",
+        content: "Simulated courier phone dispatch verification and delivery confirmation.",
       },
-      { property: "og:title", content: "Simulated Delivery Call — Pretendly" },
-      { property: "og:description", content: "Answer the fictional courier. Nothing is dialled." },
+      { property: "og:title", content: "Courier Delivery Call — Whim Cart" },
+      {
+        property: "og:description",
+        content: "Voice handover confirmation with dedicated courier.",
+      },
     ],
   }),
   component: CallPage,
@@ -40,18 +42,21 @@ function CallPage() {
     if (!order) return [];
     const first = order.lines[0];
     return [
-      { from: "courier", text: `Hello! ${order.courierName} here with order ${order.id}.` },
-      { from: "you", text: "Hi! Is it really here?" },
       {
         from: "courier",
-        text: `As real as anything in this game: your ${first?.name ?? "parcel"} is sitting at your imaginary drop point.`,
+        text: `Hi Alex! This is ${order.courierName} with Whim Cart Logistics regarding order #${order.id}.`,
       },
-      { from: "you", text: "Do I owe you anything?" },
+      { from: "you", text: "Hello! Has the package arrived at the doorstep?" },
       {
         from: "courier",
-        text: "Not a coin. Nothing here costs money — it's all fictional, remember?",
+        text: `Yes, your parcel containing "${first?.name ?? "merchandise"}" has been placed at your designated delivery point.`,
       },
-      { from: "courier", text: "Enjoy your pretend haul. I'm off to deliver a cloud." },
+      { from: "you", text: "Perfect, is there anything else needed?" },
+      {
+        from: "courier",
+        text: "Everything is fully authorized and signed off! Thanks for shopping independent creators on Whim Cart.",
+      },
+      { from: "courier", text: "Have a wonderful rest of your day!" },
     ];
   }, [order]);
 
@@ -64,18 +69,25 @@ function CallPage() {
   useEffect(() => {
     if (!answered) return;
     if (step >= script.length) return;
-    const id = window.setTimeout(() => setStep((s) => s + 1), 1600);
+    const id = window.setTimeout(() => setStep((s) => s + 1), 1500);
     return () => window.clearTimeout(id);
   }, [answered, step, script.length]);
 
   if (!order) {
     return (
       <PageShell>
-        <h1 className="text-4xl font-extrabold">Nobody is calling</h1>
-        <FictionalNotice className="mt-5" />
-        <PopLink to="/catalog" className="mt-6">
-          Start shopping
-        </PopLink>
+        <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center my-8 shadow-xs">
+          <h1 className="text-2xl font-bold text-slate-900">No incoming dispatch call</h1>
+          <p className="mt-2 text-sm text-slate-500">Explore items in the marketplace first.</p>
+          <div className="mt-6">
+            <Link
+              to="/catalog"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs"
+            >
+              Browse Catalog
+            </Link>
+          </div>
+        </div>
       </PageShell>
     );
   }
@@ -88,70 +100,102 @@ function CallPage() {
   };
 
   return (
-    <PageShell>
-      <StepBadge step={9} label="Courier call" />
-      <h1 className="mt-4 text-4xl font-extrabold sm:text-5xl">Simulated delivery call</h1>
-      <FictionalNotice className="mt-5" />
-      <p className="mt-3 text-sm text-muted-foreground">
-        This call happens entirely in your browser. No phone number is used and no call is placed.
-      </p>
+    <PageShell wide>
+      <div className="max-w-xl mx-auto space-y-6">
+        <StepBadge step={5} label="Courier Verification" />
 
-      <div className="card-pop mt-6 p-6 sm:p-8">
-        <div className="flex items-center gap-4">
-          <span
-            className={`flex size-16 items-center justify-center rounded-full border-2 border-ink bg-mint text-3xl ${
-              answered ? "" : "animate-pulse"
-            }`}
-            aria-hidden="true"
-          >
-            {order.courierEmoji}
-          </span>
+        <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-md space-y-6 text-center">
+          {/* Caller Avatar */}
+          <div className="relative mx-auto w-24 h-24">
+            <div
+              className={`w-24 h-24 rounded-full bg-slate-900 border-4 border-white shadow-md flex items-center justify-center text-4xl ${
+                answered ? "" : "animate-bounce"
+              }`}
+            >
+              {order.courierEmoji}
+            </div>
+            {!answered && (
+              <span className="absolute inset-0 rounded-full border-2 border-emerald-500 animate-ping opacity-75 pointer-events-none" />
+            )}
+          </div>
+
           <div>
-            <p className="font-display text-2xl font-extrabold">{order.courierName}</p>
-            <p className="font-mono text-sm text-muted-foreground" aria-live="polite">
+            <h1 className="text-2xl font-extrabold text-slate-900 font-display">
+              {order.courierName}
+            </h1>
+            <p className="text-xs font-semibold text-slate-500 mt-0.5">
+              Whim Logistics Courier • Order #{order.id}
+            </p>
+            <p className="text-xs font-mono text-emerald-700 font-bold mt-2">
               {answered
-                ? `Fictional call · ${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(
+                ? `Active Call · ${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(
                     seconds % 60,
                   ).padStart(2, "0")}`
-                : "Incoming pretend call…"}
+                : "Incoming Courier Voice Call..."}
             </p>
           </div>
+
+          {!answered ? (
+            <div className="flex items-center justify-center gap-4 pt-4">
+              <button
+                type="button"
+                onClick={() => setAnswered(true)}
+                className="px-6 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-transform active:scale-95 cursor-pointer"
+              >
+                <Phone className="w-4 h-4" />
+                <span>Accept Call</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={endCall}
+                className="px-6 py-3.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-2 transition-transform active:scale-95 cursor-pointer"
+              >
+                <PhoneOff className="w-4 h-4 text-rose-500" />
+                <span>Decline & View Summary</span>
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4 text-left">
+              {/* Dialogue Transcript */}
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3 max-h-64 overflow-y-auto">
+                {script.slice(0, step).map((beat, index) => (
+                  <div
+                    key={index}
+                    className={`p-3 rounded-xl text-xs ${
+                      beat.from === "courier"
+                        ? "bg-white border border-slate-200 text-slate-800 mr-8 shadow-2xs"
+                        : "bg-emerald-700 text-white ml-8"
+                    }`}
+                  >
+                    <p
+                      className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${
+                        beat.from === "courier" ? "text-slate-400" : "text-emerald-200"
+                      }`}
+                    >
+                      {beat.from === "courier" ? order.courierName : "You"}
+                    </p>
+                    <p className="font-medium">{beat.text}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-center pt-2">
+                <button
+                  type="button"
+                  onClick={endCall}
+                  className="px-8 py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-2 shadow-xs transition-colors cursor-pointer"
+                >
+                  <PhoneOff className="w-4 h-4 text-rose-400" />
+                  <span>{finished ? "Complete Call & View Receipt" : "End Call"}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
-        {!answered ? (
-          <div className="mt-8 flex flex-wrap gap-3">
-            <PopButton size="lg" variant="mint" onClick={() => setAnswered(true)}>
-              Answer 📞
-            </PopButton>
-            <PopButton size="lg" variant="ghost" onClick={endCall}>
-              Decline & see result
-            </PopButton>
-          </div>
-        ) : (
-          <>
-            <ul className="mt-6 space-y-3" aria-live="polite">
-              {script.slice(0, step).map((beat, index) => (
-                <li
-                  key={index}
-                  className={`max-w-[85%] rounded-xl border-2 border-ink px-4 py-2 text-sm font-semibold ${
-                    beat.from === "courier" ? "bg-secondary" : "ml-auto bg-accent/40"
-                  }`}
-                >
-                  <span className="block font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    {beat.from === "courier" ? order.courierName : "You"}
-                  </span>
-                  {beat.text}
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <PopButton size="lg" onClick={endCall}>
-                {finished ? "End call & see result" : "Hang up"}
-              </PopButton>
-            </div>
-          </>
-        )}
+        <FictionalNotice />
       </div>
     </PageShell>
   );

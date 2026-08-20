@@ -1,0 +1,6 @@
+{
+  "name": "Whim Cart Ecommerce",
+  "description": "Modern ecommerce marketplace with curated products, merchant seller portal with multi-image gallery upload, verified seller management, and seamless order checkout experience.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

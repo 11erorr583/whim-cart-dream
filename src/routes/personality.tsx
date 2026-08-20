@@ -1,8 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { UserCheck, Sparkles, Wallet, Check, ArrowRight, ShieldCheck } from "lucide-react";
 
 import { FictionalNotice } from "@/components/fictional/FictionalNotice";
 import { PageShell } from "@/components/fictional/PageShell";
-import { PopButton } from "@/components/fictional/PopButton";
 import { StepBadge } from "@/components/fictional/StepBadge";
 import { PERSONALITIES } from "@/data/personalities";
 import { CURRENCY_LABEL, formatCoins } from "@/lib/fictional-config";
@@ -11,16 +11,16 @@ import { useSession } from "@/state/session";
 export const Route = createFileRoute("/personality")({
   head: () => ({
     meta: [
-      { title: "Choose Your Shopping Personality — Pretendly" },
+      { title: "Select Shopper Profile & Budget — Whim Cart" },
       {
         name: "description",
         content:
-          "Impulse Buyer, Window Shopper, Delusional Millionaire or Responsible Adult — pick the shopper you play as.",
+          "Select your shopping profile persona, budget tier, and custom reward preferences.",
       },
-      { property: "og:title", content: "Choose Your Shopping Personality — Pretendly" },
+      { property: "og:title", content: "Shopper Profile — Whim Cart" },
       {
         property: "og:description",
-        content: "Four archetypes, four fictional wallets, four very different carts.",
+        content: "Select your buyer persona and wallet budget allocation.",
       },
     ],
   }),
@@ -38,60 +38,97 @@ function PersonalityPage() {
 
   return (
     <PageShell wide>
-      <StepBadge step={2} label="Personality" />
-      <h1 className="mt-4 text-4xl font-extrabold sm:text-5xl">Pick your shopping personality</h1>
-      <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-        Your choice sets your fictional wallet, your reward multiplier, and the voice in your head
-        while you browse.
-      </p>
+      <div className="max-w-4xl mx-auto space-y-6">
+        <StepBadge step={1} label="Buyer Profile" />
 
-      <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-        {PERSONALITIES.map((p) => {
-          const selected = session.personalityId === p.id;
-          return (
-            <li key={p.id}>
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-800">
+              <UserCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+                Buyer Archetype
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display">
+                Select Your Shopper Profile & Budget
+              </h1>
+            </div>
+          </div>
+          <p className="text-sm text-slate-600">
+            Customize your shopping preference tier, starting spending allowance, and reward point
+            multipliers across all independent merchant stores.
+          </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {PERSONALITIES.map((p) => {
+            const selected = session.personalityId === p.id;
+            return (
               <button
+                key={p.id}
                 type="button"
                 onClick={() => pick(p.id)}
                 aria-pressed={selected}
-                className={`card-pop h-full w-full p-6 text-left transition-transform duration-150 hover:-translate-y-1 ${
-                  selected ? "bg-mint shadow-pop" : ""
+                className={`p-6 rounded-2xl border text-left transition-all relative flex flex-col justify-between cursor-pointer ${
+                  selected
+                    ? "bg-white border-emerald-600 shadow-md ring-2 ring-emerald-500/20"
+                    : "bg-white border-slate-200 hover:border-slate-300 hover:shadow-xs"
                 }`}
               >
-                <span aria-hidden="true" className="text-4xl">
-                  {p.emoji}
-                </span>
-                <h2 className="mt-3 text-2xl font-extrabold">{p.name}</h2>
-                <p className="font-semibold text-primary">{p.tagline}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{p.description}</p>
-                <dl className="mt-4 flex flex-wrap gap-2 font-mono text-xs font-bold">
-                  <div className="rounded-full border-2 border-ink bg-card px-3 py-1">
-                    <dt className="sr-only">Fictional wallet</dt>
-                    <dd title={CURRENCY_LABEL}>Wallet {formatCoins(p.startingWallet)}</dd>
+                <div>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-2xl">
+                        {p.emoji}
+                      </span>
+                      <div>
+                        <h2 className="text-base font-extrabold text-slate-900 font-display">
+                          {p.name}
+                        </h2>
+                        <span className="text-xs font-medium text-slate-500">{p.tagline}</span>
+                      </div>
+                    </div>
+
+                    {selected && (
+                      <span className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs shrink-0">
+                        <Check className="w-3.5 h-3.5" />
+                      </span>
+                    )}
                   </div>
-                  <div className="rounded-full border-2 border-ink bg-card px-3 py-1">
-                    <dt className="sr-only">Reward multiplier</dt>
-                    <dd>Points ×{p.rewardMultiplier}</dd>
+
+                  <p className="text-xs text-slate-600 mt-4 leading-relaxed">{p.description}</p>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-1.5 text-slate-700">
+                    <Wallet className="w-3.5 h-3.5 text-emerald-600" />
+                    <span className="font-bold">Budget: {formatCoins(p.startingWallet)}</span>
                   </div>
-                </dl>
-                <p className="mt-4 font-semibold underline">
-                  {selected ? "Selected — continue shopping" : "Play as this shopper"}
-                </p>
+
+                  <span className="text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded-full text-[11px] border border-emerald-200">
+                    {p.rewardMultiplier}x Rewards
+                  </span>
+                </div>
               </button>
-            </li>
-          );
-        })}
-      </ul>
-
-      {session.personalityId ? (
-        <div className="mt-8">
-          <PopButton size="lg" variant="accent" onClick={() => void navigate({ to: "/catalog" })}>
-            Go to the catalog →
-          </PopButton>
+            );
+          })}
         </div>
-      ) : null}
 
-      <FictionalNotice className="mt-8 max-w-2xl" />
+        {session.personalityId && (
+          <div className="flex justify-end pt-2">
+            <Link
+              to="/catalog"
+              className="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer"
+            >
+              <span>Continue to Marketplace Catalog</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        )}
+
+        <FictionalNotice />
+      </div>
     </PageShell>
   );
 }

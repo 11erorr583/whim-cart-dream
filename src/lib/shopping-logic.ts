@@ -14,7 +14,7 @@ import type {
   Product,
 } from "@/types/shopping";
 
-/** Pure business logic — deliberately UI-free so it can be reused or replaced by API calls. */
+/** Pure business logic for the Whim Cart experience */
 
 export interface DetailedCartLine {
   product: Product;
@@ -63,51 +63,63 @@ export const rewardPointsFor = (total: number, personalityId: PersonalityId | nu
 export const createFictionalOrder = (
   cart: CartItem[],
   personalityId: PersonalityId | null,
+  shippingSpeed: "Standard (Free)" | "Express (2-Day)" | "Same-Day Priority" = "Standard (Free)",
+  customAddress?: Partial<FictionalOrder["shippingAddress"]>,
 ): FictionalOrder => {
   const lines = buildCartLines(cart);
   const subtotal = lines.reduce((sum, line) => sum + line.lineTotal, 0);
-  const total = subtotal + FICTIONAL_SHIPPING;
-  const courier =
-    COURIERS[Math.floor(Math.random() * COURIERS.length)] ?? COURIERS[0]!;
+  const shippingFee =
+    shippingSpeed === "Same-Day Priority" ? 14.99 : shippingSpeed === "Express (2-Day)" ? 7.99 : 0;
+  const discount = subtotal > 150 ? 15.0 : 0;
+  const total = Math.max(0, subtotal + shippingFee - discount);
+  const courier = COURIERS[Math.floor(Math.random() * COURIERS.length)] ?? COURIERS[0]!;
 
   return {
-    id: `FIC-${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
+    id: `WHIM-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+    trackingNumber: `1Z99999999${Math.floor(10000000 + Math.random() * 90000000)}`,
     createdAt: new Date().toISOString(),
     personalityId,
     lines: lines.map((line) => ({
       productId: line.product.id,
       name: line.product.name,
+      image: line.product.images[0] || "",
       emoji: line.product.emoji,
       unitPrice: line.product.price,
       quantity: line.quantity,
     })),
     subtotal,
-    fictionalShipping: FICTIONAL_SHIPPING,
+    shipping: shippingFee,
+    discount,
     total,
     rewardPoints: rewardPointsFor(total, personalityId),
     status: "placed",
     deliveryAt: Date.now() + DELIVERY_SECONDS * 1000,
     courierName: courier.name,
     courierEmoji: courier.emoji,
+    shippingAddress: {
+      fullName: customAddress?.fullName || "Alex Rivera",
+      addressLine: customAddress?.addressLine || "742 Skyline Blvd, Apt 4B",
+      city: customAddress?.city || "San Francisco, CA",
+      postalCode: customAddress?.postalCode || "94107",
+      country: customAddress?.country || "United States",
+      deliverySpeed: shippingSpeed,
+    },
   };
 };
 
 const VERDICTS: Record<PersonalityId, { verdict: string; badge: string }> = {
-  "impulse-buyer": { verdict: "Chaos Merchant", badge: "⚡" },
-  "window-shopper": { verdict: "Master of Restraint", badge: "🪟" },
-  "delusional-millionaire": { verdict: "Fictional Tycoon", badge: "🦚" },
-  "responsible-adult": { verdict: "Spreadsheet Sage", badge: "🧾" },
+  "impulse-buyer": { verdict: "Curator of Instant Gratification", badge: "⚡" },
+  "window-shopper": { verdict: "Discerning Aesthetic Minimalist", badge: "✨" },
+  "delusional-millionaire": { verdict: "Luxury Marketplace Connoisseur", badge: "💎" },
+  "responsible-adult": { verdict: "Strategic Value Optimizer", badge: "📊" },
 };
 
-export const buildFinalResult = (
-  order: FictionalOrder,
-  callCompleted: boolean,
-): FinalResult => {
+export const buildFinalResult = (order: FictionalOrder, callCompleted: boolean): FinalResult => {
   const personality = getPersonality(order.personalityId);
   const wallet = personality?.startingWallet ?? 2500;
   const base = order.personalityId
     ? VERDICTS[order.personalityId]
-    : { verdict: "Curious Browser", badge: "🛍️" };
+    : { verdict: "Premier Shopper", badge: "🛍️" };
   const items = order.lines.reduce((sum, line) => sum + line.quantity, 0);
 
   return {
@@ -118,21 +130,21 @@ export const buildFinalResult = (
     saved: Math.max(wallet - order.total, 0),
     rewardPoints: order.rewardPoints,
     callCompleted,
-    summary: `You fictionally acquired ${items} item${items === 1 ? "" : "s"} for ${Math.round(
-      order.total,
-    ).toLocaleString("en-US")} fictional coins, delivered by ${order.courierName}.`,
+    summary: `You successfully completed order ${order.id} with ${items} premier product${items === 1 ? "" : "s"} for a total of $${order.total.toFixed(
+      2,
+    )} USD, dispatched via ${order.courierName}.`,
   };
 };
 
 export const recommendFor = (personalityId: PersonalityId | null): Product[] => {
   if (personalityId === "delusional-millionaire") {
-    return [...allProducts()].sort((a, b) => b.price - a.price).slice(0, 3);
+    return [...allProducts()].sort((a, b) => b.price - a.price).slice(0, 4);
   }
   if (personalityId === "responsible-adult") {
-    return [...allProducts()].sort((a, b) => b.rating - a.rating).slice(0, 3);
+    return [...allProducts()].sort((a, b) => b.rating - a.rating).slice(0, 4);
   }
   if (personalityId === "window-shopper") {
-    return [...allProducts()].sort((a, b) => a.price - b.price).slice(0, 3);
+    return [...allProducts()].sort((a, b) => a.price - b.price).slice(0, 4);
   }
-  return [...allProducts()].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 3);
+  return [...allProducts()].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 4);
 };

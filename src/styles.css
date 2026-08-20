@@ -5,20 +5,20 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Fictional Shopping Entertainment Platform — design system.
- * Playful arcade-retail aesthetic: warm paper background, electric coral,
- * mint receipt-green, and ink-black type. All colors in oklch.
+ * Whim Cart Design System
+ * Clean, sophisticated modern ecommerce marketplace styling.
+ * High contrast, refined neutral palette, elegant typography.
  */
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 6px);
-  --radius-2xl: calc(var(--radius) + 12px);
-  --radius-3xl: calc(var(--radius) + 20px);
-  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.5rem;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "Space Mono", ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -46,38 +46,38 @@
   --color-sunny-foreground: var(--sunny-foreground);
   --color-ink: var(--ink);
   --color-paper: var(--paper);
-  --shadow-pop: 6px 6px 0 var(--ink);
-  --shadow-pop-sm: 3px 3px 0 var(--ink);
-  --shadow-soft: 0 18px 40px -20px oklch(0.2 0.06 40 / 0.45);
+  --shadow-pop: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+  --shadow-pop-sm: 0 2px 10px -1px rgba(15, 23, 42, 0.06);
+  --shadow-soft: 0 20px 35px -10px rgba(15, 23, 42, 0.09);
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.978 0.017 85);
-  --foreground: oklch(0.21 0.03 45);
+  --radius: 0.625rem;
+  --background: oklch(0.985 0.005 240);
+  --foreground: oklch(0.18 0.03 260);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.03 45);
+  --card-foreground: oklch(0.18 0.03 260);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.03 45);
-  --primary: oklch(0.63 0.21 25);
-  --primary-foreground: oklch(0.99 0.01 85);
-  --secondary: oklch(0.94 0.03 85);
-  --secondary-foreground: oklch(0.25 0.04 45);
-  --muted: oklch(0.95 0.02 85);
-  --muted-foreground: oklch(0.5 0.03 55);
-  --accent: oklch(0.72 0.15 195);
-  --accent-foreground: oklch(0.18 0.04 220);
-  --destructive: oklch(0.55 0.22 20);
-  --destructive-foreground: oklch(0.99 0.01 85);
-  --border: oklch(0.87 0.02 70);
-  --input: oklch(0.87 0.02 70);
-  --ring: oklch(0.63 0.21 25);
-  --mint: oklch(0.85 0.13 155);
-  --mint-foreground: oklch(0.28 0.08 155);
-  --sunny: oklch(0.88 0.15 90);
-  --sunny-foreground: oklch(0.28 0.07 70);
-  --ink: oklch(0.21 0.03 45);
-  --paper: oklch(0.99 0.012 85);
+  --popover-foreground: oklch(0.18 0.03 260);
+  --primary: oklch(0.24 0.04 265);
+  --primary-foreground: oklch(0.99 0.005 240);
+  --secondary: oklch(0.96 0.01 250);
+  --secondary-foreground: oklch(0.22 0.04 260);
+  --muted: oklch(0.955 0.008 250);
+  --muted-foreground: oklch(0.48 0.02 260);
+  --accent: oklch(0.55 0.16 160);
+  --accent-foreground: oklch(0.99 0.005 240);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.99 0.005 240);
+  --border: oklch(0.91 0.01 250);
+  --input: oklch(0.91 0.01 250);
+  --ring: oklch(0.35 0.05 260);
+  --mint: oklch(0.92 0.06 160);
+  --mint-foreground: oklch(0.25 0.09 160);
+  --sunny: oklch(0.92 0.1 85);
+  --sunny-foreground: oklch(0.32 0.08 75);
+  --ink: oklch(0.2 0.03 260);
+  --paper: oklch(0.99 0.005 240);
 }
 
 @layer base {
@@ -89,42 +89,46 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
 
   h1,
   h2,
-  h3 {
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+    font-weight: 700;
   }
 
   :focus-visible {
-    outline: 3px solid var(--color-primary);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 }
 
 @utility card-pop {
-  border: 2px solid var(--ink);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   background: var(--card);
   box-shadow: var(--shadow-pop-sm);
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    box-shadow: var(--shadow-pop);
+  }
 }
 
 @utility surface-grid {
-  background-image:
-    radial-gradient(circle at 1px 1px, oklch(0.21 0.03 45 / 0.08) 1px, transparent 0);
-  background-size: 22px 22px;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    oklch(0.2 0.03 260 / 0.04) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
 }
 
 @utility fictional-stripe {
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--sunny),
-    var(--sunny) 12px,
-    var(--paper) 12px,
-    var(--paper) 24px
-  );
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {
