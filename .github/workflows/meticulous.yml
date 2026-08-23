@@ -31,11 +31,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "22"
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build application
         env:
@@ -46,4 +46,4 @@ jobs:
         uses: alwaysmeticulous/report-diffs-action/upload-assets@v1
         with:
           api-token: ${{ secrets.METICULOUS_API_TOKEN }}
-          app-directory: "dist"
+          app-directory: ".output/public"
