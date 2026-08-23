@@ -40,6 +40,14 @@ jobs:
           METICULOUS_BUILD: "true"
         run: pnpm build
 
+      - name: Start server in background
+        env:
+          PORT: 3000
+          HOST: "0.0.0.0"
+        run: |
+          node .output/server/index.mjs &
+          npx wait-on http-get://localhost:3000 --timeout 30000
+
       - name: Run Meticulous Tests & Report Diffs
         uses: alwaysmeticulous/report-diffs-action@v1
         with:
