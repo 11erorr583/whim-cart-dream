@@ -1,23 +1,11 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { componentTagger } from "lovable-tagger";
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  base: "/whim-cart-dream/",
-  server: {
-    host: "::",
-    port: 8080,
+export default defineConfig({
+  tanstackStart: {
+    // Redirect TanStack Start's bundled server entry to src/server.ts (SSR error wrapper)
+    server: { entry: "server" },
   },
-  plugins: [
-    react(),
-    mode === 'development' &&
-    componentTagger(),
-  ].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+  nitro: {
+    preset: "node-server",
   },
-}));
+});
