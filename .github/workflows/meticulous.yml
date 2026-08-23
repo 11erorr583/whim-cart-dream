@@ -40,8 +40,9 @@ jobs:
           METICULOUS_BUILD: "true"
         run: pnpm build
 
-      - name: Upload to Meticulous
-        uses: alwaysmeticulous/report-diffs-action/upload-assets@v1
+      - name: Run Meticulous Tests & Report Diffs
+        uses: alwaysmeticulous/report-diffs-action@v1
         with:
           api-token: ${{ secrets.METICULOUS_API_TOKEN }}
-          app-directory: ".output/public"
+          app-url: "http://localhost:3000"
+          use-deployment-url: false
