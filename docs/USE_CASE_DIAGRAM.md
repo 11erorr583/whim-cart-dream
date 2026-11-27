@@ -71,3 +71,6 @@ stateDiagram-v2
  SimulatedDelivered --> [*]
 ```
 Cancellation cutoff is proposed before simulated shipment; call state is independent.
+
+## Security extensions
+UC02 includes email verification, secure recovery and session revocation; UC06–10 require owner-scoped authorization and vault-first transaction locking; UC13 requires per-call consent and quota reservation before dispatch; UC14 includes recent-auth export/correction/deletion and cancellation of pending jobs; UC15 requires MFA and catalog-only privileges; UC16–18 validate job ownership and callback authenticity. Any failed security precondition denies operation without side effects. See SECURITY_REQUIREMENTS.md.

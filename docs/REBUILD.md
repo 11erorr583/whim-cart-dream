@@ -1,2 +1,5 @@
 # Clean rebuild decision
 Owner requested complete replacement of existing application code. This supersedes the retain/refactor recommendation in ROADMAP.md. All legacy Lovable source, seller/game routes, configuration and workflows are removed from this branch. Git history and roadmap remain. New frontend uses React + TypeScript + Vite with no legacy dependencies. Backend uses Python FastAPI. PostgreSQL development service is prepared. This is phase 1 scaffolding only. Next: database migrations, authentication, transactional vault, catalog and checkout, 3D mall, licensed audio and consent-based calls. No real money or shipping. Existing main branch remains until rebuild PR is merged. Do not force push. Validate builds and deployment configuration before merging; legacy Lovable deployment may no longer work with this layout.
+
+## Current branch and security status
+The rebuild is now on main. Main-only development is owner preference. Security policy and mandatory release gates apply; the scaffold is not production-ready.

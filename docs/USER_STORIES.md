@@ -22,3 +22,6 @@ Version 1.0 | Priorities P0 essential, P1 full experience, P2 later. IDs trace t
 | US18 | Operator, monitor and recover jobs so orders and balances remain reliable | P0 | Retry/deduplication, alert on failures, restore test; no sensitive logs |
 ## Definition of done
 Acceptance criteria pass, unit/integration tests and relevant Playwright journeys pass, accessibility reviewed, API/schema docs updated, no secrets, no real-payment paths, build succeeds. 3D/audio changes require device and licensing QA. Stories are planned, not completed.
+
+## Security acceptance amendment
+US02: verified email, safe recovery and session revocation. US03–10: cross-account access denied and ledger invariants tested. US11–12: trusted bounded assets, no tracking. US14: per-call consent, revocation, quotas and safe timeout handling. US16: authenticated export, correction, deletion and backup/processor lifecycle. US17: admin MFA and no private customer history access. US18: restricted worker, redacted audit and incident exercise. All stories require applicable SR01–SR14 tests before completion.
